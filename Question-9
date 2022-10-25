@@ -1,0 +1,284 @@
+//This Program compares between Two Files and Prints Whether They are Identical or Not
+// -------------------------------------------------------------------------------------------------------------
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+using namespace std;
+
+void LoadLines (const char File1Name[100], const char File2Name[100], vector<string>& lines1, vector<string>& lines2){
+    ifstream file1, file2;
+    char LineFile1[100], LineFile2[100];
+    file1.open(File1Name);
+    file2.open(File2Name);
+    if (file1.is_open() && file2.is_open()) {
+        while (!file1.eof()) {
+            file1.getline(LineFile1, 100, '\n');
+            lines1.emplace_back(string(LineFile1));
+        }
+        file1.close();
+        while (!file2.eof()) {
+            file2.getline(LineFile2, 100, '\n');
+            lines2.emplace_back(string(LineFile2));
+        }
+        file2.close();
+    }
+}
+
+void LoadFilesChar(ifstream& file1, ifstream& file2, vector<char>& text1, vector<char>& text2, vector<string>& lines1, vector<string>& lines2){
+    char FileName1[100], FileName2[100], LineFile1[100], LineFile2[100], letter1, letter2;
+    cout << "Please Enter the First File Name, With its Extension: " << endl;
+    cin.getline(FileName1, 100, '\n');
+    cout << "Please Enter the Second File Name, With its Extension: " << endl;
+    cin.getline(FileName2, 100, '\n');
+    LoadLines(FileName1, FileName2, lines1, lines2);
+    file1.open(FileName1);
+    file2.open(FileName2);
+    if (file1.is_open() && file2.is_open()){
+        cout << "The Two Files are Opened Successfully!" << endl;
+        while(!file1.eof()){
+            file1.get(letter1);
+            text1.push_back(letter1);
+        }
+        file1.close();
+        while(!file2.eof()){
+            file2.get(letter2);
+            text2.push_back(letter2);
+        }
+        file2.close();
+    }
+}
+
+
+void CharByChar(vector<char>& text1, vector<char>& text2, vector<string>& lines1, vector<string>& lines2){
+    int N_spaces = 0, LineNumber;
+    if (text1.size() == text2.size()){
+        if (text1 == text2){
+            cout << "The Two Files are Identical!" << endl;
+        }
+        else{
+            cout << "The Two Files are Different!" << endl;
+            for (int i = 0; i < text1.size(); i++){
+                if (text1[i] != text2[i]){
+                    for (int j = 0; j <= i; j++){
+                        if (text1[j] == '\n'){
+                            N_spaces++;
+                        }
+                    }
+                    LineNumber = N_spaces + 1;
+                    cout << "The First Different Line in the First File: \n\tLine Number: " << LineNumber
+                    << "\n\tLine Content: ";
+                    for (char l: lines1[N_spaces]){
+                        cout << l;
+                    }
+                    cout << "\nThe First Different Line in the Second File: \n\tLine Number: " << LineNumber
+                         << "\n\tLine Content: ";
+                    for (char l: lines2[N_spaces]){
+                        cout << l;
+                    }
+                    exit(0);
+                }
+            }
+
+        }
+    }
+    else{
+        cout << "The Two Files are Different!" << endl;
+        if (text1.size() > text2.size()){
+            int diff = text1.size() - text2.size();
+            for (int i = 0; i < diff; i++){
+                text2.push_back('#');
+            }
+        }
+
+        if (text2.size() > text1.size()){
+            int diff = text2.size() - text1.size();
+            for (int i = 0; i < diff; i++){
+                text1.push_back('#');
+            }
+        }
+        for (int i = 0; i < text1.size(); i++){
+            if (text1[i] != text2[i]){
+                for (int j = 0; j <= i; j++){
+                    if (text1[j] == '\n'){
+                        N_spaces++;
+                    }
+                }
+                LineNumber = N_spaces + 1;
+                if (text2[i + 1] == '#'){
+                    cout << "The First File has more Characters than the Second File, Which Starts at Line Number: "
+                         << LineNumber << "\n\tLine Content: ";
+                    for (char j : lines1[N_spaces]){
+                        cout << j;
+                    }
+                    exit(0);
+                }
+                else if (text1[i + 1] == '#'){
+                    cout << "The Second File has more Characters than the First File, Which Starts at Line Number: "
+                         << LineNumber << "\n\tLine Content: ";
+                    for (char l: lines2[N_spaces]){
+                        cout << l;
+                    }
+                    exit(0);
+                }
+                else{
+                    cout << "The First Different Line in the First File: \n\tLine Number: " << LineNumber
+                         << "\n\tLine Content: ";
+                    for (char l: lines1[N_spaces]){
+                        cout << l;
+                    }
+                    cout << "\nThe First Different Line in the Second File: \n\tLine Number: " << LineNumber
+                         << "\n\tLine Content: ";
+                    for (char l: lines2[N_spaces]){
+                        cout << l;
+                    }
+                    exit(0);
+                }
+            }
+        }
+    }
+}
+
+void LoadFilesWord(ifstream& file1, ifstream& file2, vector<string>& text1, vector<string>& text2, vector<string>& lines1, vector<string>& lines2){
+    char FileName1[100], FileName2[100], LineFile1[100],  LineFile2[100];
+    string word1, word2;
+    cout << "Please Enter the Name of the First File, with its Extension: " << endl;
+    cin.getline(FileName1, 100, '\n');
+    cout << "Please Enter the Name of the Second File, with its Extension: " << endl;
+    cin.getline(FileName2, 100, '\n');
+    LoadLines(FileName1, FileName2, lines1, lines2);
+    file1.open(FileName1);
+    file2.open(FileName2);
+    if (file1.is_open() && file2.is_open()){
+        cout << "The Two Files are Opened Successfully!" << endl;
+        while (!file1.eof()){
+            file1 >> word1;
+            text1.push_back(word1);
+        }
+        file1.close();
+        while (!file2.eof()){
+            file2 >> word2;
+            text2.push_back(word2);
+        }
+        file2.close();
+    }
+}
+
+void WordByWord(vector<string>& text1, vector<string>& text2, vector<string>& lines1, vector<string>& lines2){
+    int lineNumber1, lineNumber2;
+    if (text1.size() == text2.size()){
+        if (text1 == text2){
+            cout << "The Two Files are Identical!" << endl;
+        }
+        else{
+            cout << "The Two Files are Different!" << endl;
+            for(int i = 0; i < text1.size(); i++){
+                if (text1[i] != text2[i]){
+                    for (int j = 0; j < lines1.size(); j++){
+                        if (lines1[j].find(text1[i]) != string :: npos){
+                            lineNumber1 = j + 1;
+                        }
+                    }
+                    for (int j = 0; j < lines2.size(); j++){
+                        if (lines2[j].find(text2[i]) != string :: npos){
+                            lineNumber2 = j + 1;
+                        }
+                    }
+                    cout << "The First Different Word in the First File: \n\tThe Word: " << text1[i]
+                     << "\n\tLine Content: ";
+                    for (char l: lines1[lineNumber1 - 1]){
+                        cout << l;
+                    }
+                    cout << "\nThe First Different Word in the Second File: \n\tThe Word: " << text2[i]
+                         << "\n\tLine Content: ";
+                    for (char l: lines2[lineNumber2 - 1]){
+                        cout << l;
+                    }
+                    exit(0);
+
+                }
+            }
+        }
+    }
+    else{
+        cout << "The Two Files are Different!" << endl;
+        if (text1.size() > text2.size()){
+            int diff = text1.size() - text2.size();
+            for (int i = 0; i < diff; i++){
+                text2.emplace_back("##");
+            }
+        }
+        if (text2.size() > text1.size()){
+            int diff = text2.size() - text1.size();
+            for (int i = 0; i < diff; i++){
+                text1.emplace_back("##");
+            }
+        }
+        for(int i = 0; i < text1.size(); i++){
+            if (text1[i] !=text2[i]){
+                for (int j = 0; j < lines1.size(); j++){
+                    if (lines1[j].find(text1[i]) != string :: npos){
+                        lineNumber1 = j + 1;
+                    }
+                }
+                for (int j = 0; j < lines2.size(); j++){
+                    if (lines2[j].find(text2[i]) != string :: npos){
+                        lineNumber2 = j + 1;
+                    }
+                }
+                if (text1[i] == "##"){
+                    cout << "The Second File has more Words than the First File, Which Starts by the Word: "
+                         << text2[i] << "\n\tLine Content: ";
+                    for (char j : lines2[lineNumber2 - 1]){
+                        cout << j;
+                    }
+                    exit(0);
+
+                }
+                else if (text2[i] == "##"){
+                    cout << "The First File has more Words than the Second File, Which Starts by the Word: "
+                         << text1[i] << "\n\tLine Content: ";
+                    for (char j : lines1[lineNumber1 - 1]){
+                        cout << j;
+                    }
+                    exit(0);
+
+                }
+                else{
+                    cout << "The First Different Word in the First File: \n\tThe Word: " << text1[i]
+                         << "\n\tLine Content: ";
+                    for (char l: lines1[lineNumber1 - 1]){
+                        cout << l;
+                    }
+                    cout << "\nThe First Different Word in the Second File: \n\tThe Word: " << text2[i]
+                         << "\n\tLine Content: ";
+                    for (char l: lines2[lineNumber2 - 1]){
+                        cout << l;
+                    }
+                    exit(0);
+                }
+            }
+        }
+    }
+}
+
+int main(){
+    int choice;
+    ifstream file1, file2;
+    vector<string> lines1 , lines2, Words1, Words2;
+    vector<char> text1, text2;
+    cout << "Choose the NUMBER of the Type of File Comparison You Want: \n1.Character By Character Comparison."
+            "\n2.Word By Word Comparison." << endl;
+    cin >> choice;
+    cin.ignore();
+    if (choice == 1){
+        LoadFilesChar(file1, file2, text1, text2, lines1, lines2);
+        CharByChar(text1, text2, lines1, lines2);
+    }
+    else if (choice == 2){
+        LoadFilesWord(file1, file2, Words1, Words2, lines1, lines2);
+        WordByWord(Words1, Words2, lines1, lines2);
+    }
+    return 0;
+}
