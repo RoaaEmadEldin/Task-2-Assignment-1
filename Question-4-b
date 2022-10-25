@@ -1,0 +1,28 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+void numbers(string prefix, int k){
+    if (k == 0){
+        cout << prefix << endl;
+    }
+    else if(k > 0){
+        numbers(prefix + "0", k - 1);
+        numbers(prefix + "1", k - 1);
+    }
+}
+
+// Prefix = 00101 , k = 2 ---> 2^2 = 4 possible outputs
+// 001010 , 1 ---> 0010100 , 0 ---> print : 0010100
+// 001010 , 1 ---> 0010101 , 0 ---> print : 0010101
+// 001011 , 1 ---> 0010110 , 0 ---> print : 0010110
+// 001011 , 1 ---> 0010111 , 0 ---> print : 0010111
+
+int main(){
+    string prefix;
+    int k;
+    cout << "Please Enter the Prefix and k: " << endl;
+    cin >> prefix >> k;
+    numbers(prefix, k);
+    return 0;
+}
