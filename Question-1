@@ -1,0 +1,43 @@
+// This is a program that converts the male speech into an inclusive speech that include both male and female.
+
+#include <iostream>
+#include <string>
+#include <cctype>
+#include <vector>
+using namespace std;
+
+vector<string> MaleToFemale(string &sentence){
+    vector<string> comparison = {"He", "he", "His", "his", "Him", "him"};
+    vector<string> result;
+    string word = "";
+    for (int i = 0; i < sentence.length(); i++){
+        if (ispunct(sentence[i]) == false && isspace(sentence[i]) == false){
+            word.push_back(sentence[i]);
+        }
+        else{
+                if (word == comparison[0] || word == comparison[1]){
+                    word += " or she";
+                }
+                else if (word == comparison[2] || word == comparison[3] || word == comparison[4] || word == comparison[5]){
+                    word += " or her";
+                }
+                word.push_back(sentence[i]);
+                result.push_back(word);
+                word = "";
+        }
+    }
+    return result;
+}
+
+int main() {
+    vector<string> result;
+    string sentence;
+    cout << "Please Enter a Sentence to Convert into Inclusive Sentence: " << endl;
+    getline(cin, sentence);
+    result = MaleToFemale(sentence);
+    cout << "\nThe Inclusive Sentence: " << endl;
+    for (int i = 0; i < result.size(); i++){
+        cout << result[i];
+    }
+    return 0;
+}
