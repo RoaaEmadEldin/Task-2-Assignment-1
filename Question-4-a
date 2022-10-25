@@ -1,0 +1,25 @@
+#include <iostream>
+using namespace std;
+
+void binaryPrint(int n){
+    if(n == 0){
+        cout << 0;
+    }
+    else if (n == 1){
+        cout << 1;
+    }
+    if (n > 1) {
+        binaryPrint(n / 2);
+        cout << n % 2;
+    }
+}
+
+int main(){
+    int n;
+    cout << "Please Enter a POSITIVE Number to Get its Binary Representation: " << endl;
+    cin >> n;
+    cin.ignore();
+    cout << "Its Binary Representation: " << endl;
+    binaryPrint(n);
+    return 0;
+}
